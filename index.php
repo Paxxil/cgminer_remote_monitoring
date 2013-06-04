@@ -184,7 +184,18 @@ for ($i=0; $i<$nr_rigs; $i++)
 						<td style="text-align:center"><?php echo $gpu['Status'] == 'Alive' ? '<span class="ok">' . $gpu['Status'] . '</span>' : '<span class="error">' . $gpu['Status'] . '</span>' ?></td>
 						<td style="text-align:center"><?php echo $gpu['Temperature'] > 75 ? '<span class="error">' . round($gpu['Temperature']) . '°C</span>' : round($gpu['Temperature']) ?>°C</td>
 						<td style="text-align:center"><?php echo $gpu['Fan Percent']?>%</td>
-						<td style="text-align:center"><?php echo $gpu['MHS 5s'] == 0 ? '<span class="error">' . $gpu['MHS 5s'] . ' | ' . $gpu['MHS av'] . '</span>' : $gpu['MHS 5s'] . ' | ' . $gpu['MHS av']?></td>
+						<td style="text-align:center">
+							<?php
+							if (100 - (($gpu['MHS 5s'] / $gpu['MHS av']) * 100) >= ALERT_MHS)
+							{
+								echo '<span class="error">' . $gpu['MHS 5s'] . ' | ' . $gpu['MHS av'] . '</span>';
+							}
+							else
+							{
+								echo $gpu['MHS 5s'] . ' | ' . $gpu['MHS av'];
+							}
+							?>
+						</td>
 						<td style="text-align:center"><?php echo $gpu['Accepted']?></td>
 						<td style="text-align:center"><?php echo $gpu['Rejected']?></td>
 						<td style="text-align:center"><?php echo $gpu['Hardware Errors'] == 0  ? '<span class="ok">0</span>' : '<span class="error">' . $gpu['Hardware Errors'] . '</span>' ?></td>
