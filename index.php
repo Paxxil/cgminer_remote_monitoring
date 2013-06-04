@@ -21,6 +21,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 		$r[$i]['devs']  = request('devs',  $r[$i]['ip'], $r[$i]['port']);
 		$r[$i]['stats'] = request('stats', $r[$i]['ip'], $r[$i]['port']);
 		$r[$i]['pools'] = request('pools', $r[$i]['ip'], $r[$i]['port']);
+		$r[$i]['coin']  = request('coin',  $r[$i]['ip'], $r[$i]['port']);
 	}
 }
 ?>
@@ -73,6 +74,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 		$r[$i]['summary']['SUMMARY']['Hardware Errors'] = isset($r[$i]['summary']['SUMMARY']['Hardware Errors']) ? $r[$i]['summary']['SUMMARY']['Hardware Errors'] : 0;
 		$r[$i]['summary']['SUMMARY']['Work Utility']    = isset($r[$i]['summary']['SUMMARY']['Work Utility'])    ? $r[$i]['summary']['SUMMARY']['Work Utility']    : 0;
 		$r[$i]['stats']['STATS0']['Elapsed']            = isset($r[$i]['stats']['STATS0']['Elapsed'])            ? $r[$i]['stats']['STATS0']['Elapsed']            : 'N/A';
+		$r[$i]['coin']['COIN']['Hash Method']           = isset($r[$i]['coin']['COIN']['Hash Method'])           ? $r[$i]['coin']['COIN']['Hash Method']           : 'sha256';
 
 		$invalid_ratio = 0;
 		$wu_ratio      = 0;
@@ -161,7 +163,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 			<th style="width:120px;">Status</th>
 			<th style="width:80px;">Temp</th>
 			<th style="width:70px;">Fan</th>
-			<th style="width:150px;">MH/s (5s | avg)</th>
+			<th style="width:150px;"><?php echo $r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? 'KH/s' : 'MH/s'?> (5s | avg)</th>
 			<th style="width:70px;">A</th>
 			<th style="width:70px;">R</th>
 			<th style="width:50px;">HW</th>
@@ -188,11 +190,11 @@ for ($i=0; $i<$nr_rigs; $i++)
 							<?php
 							if (100 - (($gpu['MHS 5s'] / $gpu['MHS av']) * 100) >= ALERT_MHS)
 							{
-								echo '<span class="error">' . $gpu['MHS 5s'] . ' | ' . $gpu['MHS av'] . '</span>';
+								echo '<span class="error">' . ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $gpu['MHS 5s'] * 1000 . ' | ' . $gpu['MHS av'] * 1000 : $gpu['MHS 5s'] . ' | ' . $gpu['MHS av']) . '</span>';
 							}
 							else
 							{
-								echo $gpu['MHS 5s'] . ' | ' . $gpu['MHS av'];
+								echo ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $gpu['MHS 5s'] * 1000 . ' | ' . $gpu['MHS av'] * 1000 : $gpu['MHS 5s'] . ' | ' . $gpu['MHS av']);
 							}
 							?>
 						</td>
