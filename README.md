@@ -1,5 +1,5 @@
-SIMPLE CGMINER REMOTE MONITORING SCRIPT
-=======================================
+SIMPLE CGMINER REMOTE MONITORING SCRIPT WITH ALERTS
+===================================================
 
 You can get the info and tutorial here:
 

@@ -1,47 +1,73 @@
 <?php
-/*
-#########################################################
-SIMPLE CGMINER REMOTE MONITORING SCRIPT
+/*########################################################
+SIMPLE CGMINER REMOTE MONITORING SCRIPT WITH ALERTS
 Created by: p4xil
-Version: 1.0
+Version: 2.0
 
 If you like it please support it with donating:
 LTC : LdQ1UHiRy24Tvmm8NHbhAdHL3Qf3JqrUbG
 BTC : 1EA8UrpifP9hi7LZHjJphCJQ6Hh45mb5pP
-#########################################################
-*/
+########################################################*/
 
-/* Connection Timeout in Seconds */
-define('SOCK_TIMEOUT', '3');
-ini_set('default_socket_timeout', SOCK_TIMEOUT);
+/*--------------
+# SETUP MINERS #
+--------------*/
 
-/* Miners to Monitor */
-/* Change YOUR_RIG_REMOTE_IP to Your Rig REMOTE IP (NOT Local IP!) */
-/* To get your remote IP go to http://www.whatismyip.com/ */
-
+// Change YOUR_RIG_REMOTE_IP to your rig REMOTE IP (NOT local IP!)
+// To get your remote IP go to http://www.whatismyip.com/
+// Uncomment (remove //) if you want to add more miners.
 $r[0]['name'] = 'MINER1';
 $r[0]['ip'] = 'YOUR_RIG_REMOTE_IP'; 
 $r[0]['port'] = '4001';
 
-$r[1]['name'] = 'MINER2';
-$r[1]['ip'] = 'YOUR_RIG_REMOTE_IP';
-$r[1]['port'] = '4002';
+//$r[1]['name'] = 'MINER2';
+//$r[1]['ip'] = 'YOUR_RIG_REMOTE_IP';
+//$r[1]['port'] = '4002';
 
-$r[2]['name'] = 'MINER3';
-$r[2]['ip'] = 'YOUR_RIG_REMOTE_IP';
-$r[2]['port'] = '4003';
+//$r[2]['name'] = 'MINER3';
+//$r[2]['ip'] = 'YOUR_RIG_REMOTE_IP';
+//$r[2]['port'] = '4003';
 
-/* URL to the Script */
-/* Change WEBSERVER_IP to Your Webserver IP or Webserver Domain if You Have it */
+//$r[3]['name'] = 'MINER3';
+//$r[3]['ip'] = 'YOUR_RIG_REMOTE_IP';
+//$r[3]['port'] = '4004';
+
+/*--------------
+# SETUP SCRIPT #
+--------------*/
+
+// URL to the script
+// Change WEBSERVER_IP to your Webserver IP or Webserver Domain if you have it.
 define('SCRIPT_URL', 'http://WEBSERVER_IP/monitoring/');
 
-/* Time in Seconds to Auto Refresh the Script */
+// Time in Seconds to Auto Refresh the script
 define('SCRIPT_REFRESH', 20);
 
+/*--------------
+# SETUP ALERTS #
+--------------*/
 
-/*#######################################################*/
-/*# DO NOT EDIT BELOW THIS LINE #########################*/
-/*#######################################################*/
+// E-Mail for Alerts
+define('ALERT_EMAIL', 'your@email.com');
+
+// Maximum allowed GPU Temperature before Alert is sent
+define('ALERT_TEMP', 75);
+
+// Maximum allowed difference in percentage (%) between 5s MH/s and (avg) MH/s before Alert is sent.
+// Formula : DIFFERENCE = 100 - ((5s / avg) * 100)
+//
+// e.g. If (avg) is 500 and 5s drops to 400 the difference will be:
+// DIFFERENCE = 100 - ((400 / 500) * 100) = 20%
+// If ALERT_MHS is set to 20, Alert will be sent.
+define('ALERT_MHS', 20);
+
+/*#####################################################################################*/
+/*# DO NOT EDIT BELOW THIS LINE #######################################################*/
+/*#####################################################################################*/
+
+/* Connection Timeout in Seconds */
+define('SOCK_TIMEOUT', '3');
+ini_set('default_socket_timeout', SOCK_TIMEOUT);
 
 /* Script Allowed Execution Time */
 set_time_limit(0);

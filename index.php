@@ -1,15 +1,13 @@
 <?php
-/*
-#########################################################
-SIMPLE CGMINER REMOTE MONITORING SCRIPT
+/*########################################################
+SIMPLE CGMINER REMOTE MONITORING SCRIPT WITH ALERTS
 Created by: p4xil
-Version: 1.0
+Version: 2.0
 
 If you like it please support it with donating:
 LTC : LdQ1UHiRy24Tvmm8NHbhAdHL3Qf3JqrUbG
 BTC : 1EA8UrpifP9hi7LZHjJphCJQ6Hh45mb5pP
-#########################################################
-*/
+########################################################*/
 
 include_once ('./functions.inc.php');
 
