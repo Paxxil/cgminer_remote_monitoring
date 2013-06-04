@@ -19,18 +19,22 @@ BTC : 1EA8UrpifP9hi7LZHjJphCJQ6Hh45mb5pP
 $r[0]['name'] = 'MINER1';
 $r[0]['ip'] = 'YOUR_RIG_REMOTE_IP'; 
 $r[0]['port'] = '4001';
+$r[0]['alert'] = TRUE; //set FALSE if you don't want to send alerts for this rig
 
 //$r[1]['name'] = 'MINER2';
 //$r[1]['ip'] = 'YOUR_RIG_REMOTE_IP';
 //$r[1]['port'] = '4002';
+//$r[1]['alert'] = TRUE; //set FALSE if you don't want to send alerts for this rig
 
 //$r[2]['name'] = 'MINER3';
 //$r[2]['ip'] = 'YOUR_RIG_REMOTE_IP';
 //$r[2]['port'] = '4003';
+//$r[2]['alert'] = TRUE; //set FALSE if you don't want to send alerts for this rig
 
 //$r[3]['name'] = 'MINER3';
 //$r[3]['ip'] = 'YOUR_RIG_REMOTE_IP';
 //$r[3]['port'] = '4004';
+//$r[3]['alert'] = TRUE; //set FALSE if you don't want to send alerts for this rig
 
 /*--------------
 # SETUP SCRIPT #

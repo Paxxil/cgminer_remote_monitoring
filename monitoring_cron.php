@@ -39,7 +39,7 @@ $fn = $path . '/email.lock';
 for ($i=0; $i<$nr_rigs; $i++)
 {
 	$status = isset($r[$i]['summary']['STATUS']['STATUS']) ? $r[$i]['summary']['STATUS']['STATUS'] : FALSE;
-	if ($status != 'S')
+	if ($status != 'S' && $r[$i]['alert'])
 	{
 		sleep(10);
 
@@ -57,7 +57,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 
 for ($i=0; $i<$nr_rigs; $i++)
 {
-	if (isset ($r[$i]['devs']))
+	if (isset ($r[$i]['devs']) && $r[$i]['alert'])
 	{
 		$j = 0;
 		$k = count($r[$i]['devs']);
