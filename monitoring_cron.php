@@ -50,7 +50,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 		if ($status != 'S')
 		{
 			$error .= $r[$i]['name'] . " Down\r\n<br>";
-			$subject .= 'M' . $i . ' ';
+			$subject .= $r[$i]['name'] . ' ';
 		}
 	}
 }
@@ -68,17 +68,17 @@ for ($i=0; $i<$nr_rigs; $i++)
 				if ($gpu['Status'] != 'Alive')
 				{
 					$error .= $r[$i]['name'] . '  - GPU ' . $j . " Down\r\n<br>";
-					$subject .= 'M' . $i . ' - G' . $j . ' ';
+					$subject .= $r[$i]['name'] . ' - G' . $j . ' ';
 				}
 				else if ($gpu['Temperature'] >= ALERT_TEMP)
 				{
 					$error .= $r[$i]['name'] . '  - GPU ' . $j . ' Temp High (' . round($gpu['Temperature']) . "C)\r\n<br>";
-					$subject .= 'M' . $i . ' - G' . $j . ' (' . round($gpu['Temperature']) . 'C) ';
+					$subject .= $r[$i]['name'] . ' - G' . $j . ' (' . round($gpu['Temperature']) . 'C) ';
 				}
 				else if (100 - (($gpu['MHS 5s'] / $gpu['MHS av']) * 100) >= ALERT_MHS)
 				{
 					$error .= $r[$i]['name'] . ' GPU ' . $j . ' ' . $gpu['MHS 5s'] . " MH/s\r\n<br>";
-					$subject .= 'M' . $i . ' - G' . $j . ' (' . $gpu['MHS 5s'] . ' MH/s) ';
+					$subject .= $r[$i]['name'] . ' - G' . $j . ' (' . $gpu['MHS 5s'] . ' MH/s) ';
 				}
 			}
 			$j++;
