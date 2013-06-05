@@ -49,7 +49,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 	<tr>
 		<th style="width:150px;">Miner</th>
 		<th style="width:120px;">Status</th>
-		<th style="width:120px;">Running</th>
+		<th style="width:120px;">Uptime</th>
 		<th style="width:100px;">MH/s</th>
 		<th style="width:80px;">A</th>
 		<th style="width:80px;">R</th>
@@ -63,6 +63,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 	$a_sum             = 0;
 	$r_sum             = 0;
 	$hw_sum            = 0;
+	$wu_sum            = 0;
 	$invalid_sum_ratio = 0;
 
 	for ($i=0; $i<$nr_rigs; $i++)
@@ -107,6 +108,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 		$a_sum    = $a_sum    + $r[$i]['summary']['SUMMARY']['Accepted'];
 		$r_sum    = $r_sum    + $r[$i]['summary']['SUMMARY']['Rejected'];
 		$hw_sum   = $hw_sum   + $r[$i]['summary']['SUMMARY']['Hardware Errors'];
+		$wu_sum   = $wu_sum   + $r[$i]['summary']['SUMMARY']['Work Utility'];
 
 		?>
 		<tr>
@@ -117,7 +119,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 			<td style="text-align:center"><?php echo $r[$i]['summary']['SUMMARY']['Accepted']?></td>
 			<td style="text-align:center"><?php echo $r[$i]['summary']['SUMMARY']['Rejected']?></td>
 			<td style="text-align:center"><?php echo $r[$i]['summary']['SUMMARY']['Hardware Errors'] == 0 ? '<span class="ok">0</span>' : '<span class="error">' . $r[$i]['summary']['SUMMARY']['Hardware Errors'] . '</span>' ?></td>
-			<td style="text-align:center"><?php echo $invalid_ratio <= 5  ? $invalid_ratio . '%' : '<span class="error">' . $invalid_ratio . '%</span>' ?></td>
+			<td style="text-align:center"><?php echo $invalid_ratio <= ALERT_STALES  ? $invalid_ratio . '%' : '<span class="error">' . $invalid_ratio . '%</span>' ?></td>
 			<td style="text-align:center"><?php echo $r[$i]['summary']['SUMMARY']['Work Utility']?></td>
 			<td style="text-align:center"><?php echo $wu_ratio?></td>
 		</tr>
@@ -137,6 +139,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 		<td style="text-align:center;"><?php echo $r_sum?></td>
 		<td style="text-align:center;"><?php echo $hw_sum == 0 ? '<span class="ok">0</span>' : '<span class="error">' . $hw_sum . '</span>' ?></td>
 		<td style="text-align:center"><?php echo $invalid_sum_ratio <= 5  ? $invalid_sum_ratio . '%' : '<span class="error">' . $invalid_sum_ratio . '%</span>' ?></td>
+		<td style="text-align:center"><?php echo $wu_sum?></td>
 		<td colspan="3"></td>
 	</tr>
 </table>
@@ -184,7 +187,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 					<tr>
 						<td style="text-align:center"><?php echo $gpu['GPU'] ?></td>
 						<td style="text-align:center"><?php echo $gpu['Status'] == 'Alive' ? '<span class="ok">' . $gpu['Status'] . '</span>' : '<span class="error">' . $gpu['Status'] . '</span>' ?></td>
-						<td style="text-align:center"><?php echo $gpu['Temperature'] > 75 ? '<span class="error">' . round($gpu['Temperature']) . '°C</span>' : round($gpu['Temperature']) ?>°C</td>
+						<td style="text-align:center"><?php echo $gpu['Temperature'] > ALERT_TEMP ? '<span class="error">' . round($gpu['Temperature']) . '°C</span>' : round($gpu['Temperature']) ?>°C</td>
 						<td style="text-align:center"><?php echo $gpu['Fan Percent']?>%</td>
 						<td style="text-align:center">
 							<?php
@@ -201,7 +204,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 						<td style="text-align:center"><?php echo $gpu['Accepted']?></td>
 						<td style="text-align:center"><?php echo $gpu['Rejected']?></td>
 						<td style="text-align:center"><?php echo $gpu['Hardware Errors'] == 0  ? '<span class="ok">0</span>' : '<span class="error">' . $gpu['Hardware Errors'] . '</span>' ?></td>
-						<td style="text-align:center"><?php echo $invalid_ratio <= 5  ? $invalid_ratio . '%' : '<span class="error">' . $invalid_ratio . '%</span>' ?></td>
+						<td style="text-align:center"><?php echo $invalid_ratio <= ALERT_STALES  ? $invalid_ratio . '%' : '<span class="error">' . $invalid_ratio . '%</span>' ?></td>
 						<td style="text-align:center"><?php echo date('Y-m-d H:i:s', $gpu['Last Valid Work']) ?></td>
 					</tr>
 					<?php

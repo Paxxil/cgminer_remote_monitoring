@@ -65,6 +65,9 @@ define('ALERT_TEMP', 75);
 // If ALERT_MHS is set to 20, Alert will be sent.
 define('ALERT_MHS', 20);
 
+// Maximum allowed stales percentage (%). If crossed it won't send Email, just color it red on dashboard.
+define('ALERT_STALES', 5);
+
 /*#####################################################################################*/
 /*# DO NOT EDIT BELOW THIS LINE #######################################################*/
 /*#####################################################################################*/
