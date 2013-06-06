@@ -191,13 +191,14 @@ for ($i=0; $i<$nr_rigs; $i++)
 						<td style="text-align:center"><?php echo $gpu['Fan Percent']?>%</td>
 						<td style="text-align:center">
 							<?php
-							if (100 - (($gpu['MHS 5s'] / $gpu['MHS av']) * 100) >= ALERT_MHS)
+							$stats_second = isset ($gpu['MHS 5s']) ? $gpu['MHS 5s'] : (isset ($gpu['MHS 2s']) ? $gpu['MHS 2s'] : FALSE);
+							if (100 - (($stats_second / $gpu['MHS av']) * 100) >= ALERT_MHS)
 							{
-								echo '<span class="error">' . ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $gpu['MHS 5s'] * 1000 . ' | ' . $gpu['MHS av'] * 1000 : $gpu['MHS 5s'] . ' | ' . $gpu['MHS av']) . '</span>';
+								echo '<span class="error">' . ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $gpu['MHS av'] * 1000 : $stats_second . ' | ' . $gpu['MHS av']) . '</span>';
 							}
 							else
 							{
-								echo ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $gpu['MHS 5s'] * 1000 . ' | ' . $gpu['MHS av'] * 1000 : $gpu['MHS 5s'] . ' | ' . $gpu['MHS av']);
+								echo ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $gpu['MHS av'] * 1000 : $stats_second . ' | ' . $gpu['MHS av']);
 							}
 							?>
 						</td>

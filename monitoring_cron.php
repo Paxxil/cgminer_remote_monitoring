@@ -63,6 +63,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 		$k = count($r[$i]['devs']);
 		foreach ($r[$i]['devs'] as $gpu)
 		{
+			$stats_second = isset ($gpu['MHS 5s']) ? $gpu['MHS 5s'] : (isset ($gpu['MHS 2s']) ? $gpu['MHS 2s'] : FALSE);
 			if ($j > 0 && $j < $k)
 			{
 				if ($gpu['Status'] != 'Alive')
@@ -75,10 +76,10 @@ for ($i=0; $i<$nr_rigs; $i++)
 					$error .= $r[$i]['name'] . '  - GPU ' . $j . ' Temp High (' . round($gpu['Temperature']) . "C)\r\n<br>";
 					$subject .= $r[$i]['name'] . ' - G' . $j . ' (' . round($gpu['Temperature']) . 'C) ';
 				}
-				else if (100 - (($gpu['MHS 5s'] / $gpu['MHS av']) * 100) >= ALERT_MHS)
+				else if (100 - (($stats_second / $gpu['MHS av']) * 100) >= ALERT_MHS)
 				{
-					$error .= $r[$i]['name'] . ' GPU ' . $j . ' ' . $gpu['MHS 5s'] . " MH/s\r\n<br>";
-					$subject .= $r[$i]['name'] . ' - G' . $j . ' (' . $gpu['MHS 5s'] . ' MH/s) ';
+					$error .= $r[$i]['name'] . ' GPU ' . $j . ' ' . $stats_second . " MH/s\r\n<br>";
+					$subject .= $r[$i]['name'] . ' - G' . $j . ' (' . $stats_second . ' MH/s) ';
 				}
 			}
 			$j++;
