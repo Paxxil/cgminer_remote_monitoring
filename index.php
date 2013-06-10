@@ -173,7 +173,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 			<th style="width:100px;">Invalid</th>
 			<th style="width:200px;">Last Work</th>
 		</tr>
-		<?
+		<?php
 		if (isset ($r[$i]['devs']))
 		{
 			$j = 0;
