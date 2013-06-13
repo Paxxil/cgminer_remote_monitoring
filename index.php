@@ -80,9 +80,9 @@ for ($i=0; $i<$nr_rigs; $i++)
 		$invalid_ratio = 0;
 		$wu_ratio      = 0;
 
-		if ($r[$i]['summary']['SUMMARY']['Accepted'] > 0)
+		if (($r[$i]['summary']['SUMMARY']['Accepted'] + $r[$i]['summary']['SUMMARY']['Rejected']) > 0)
 		{
-			$invalid_ratio = round(($r[$i]['summary']['SUMMARY']['Rejected'] / $r[$i]['summary']['SUMMARY']['Accepted']) * 100,2);
+			$invalid_ratio = round(($r[$i]['summary']['SUMMARY']['Rejected'] / ($r[$i]['summary']['SUMMARY']['Accepted'] + $r[$i]['summary']['SUMMARY']['Rejected'])) * 100,2);
 		}
 
 		if ($r[$i]['stats']['STATS0']['Elapsed'] == 'N/A')
@@ -182,7 +182,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 			{
 				if ($j > 0 && $j < $k)
 				{
-					$invalid_ratio = round(($gpu['Rejected'] / $gpu['Accepted']) * 100,2);
+					$invalid_ratio = round(($gpu['Rejected'] / ($gpu['Accepted'] + $gpu['Rejected'])) * 100,2);
 					?>
 					<tr>
 						<td style="text-align:center"><?php echo $gpu['GPU'] ?></td>
