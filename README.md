@@ -3,7 +3,7 @@ SIMPLE CGMINER REMOTE MONITORING SCRIPT WITH ALERTS
 
 You can get the info and tutorial here:
 
-https://bitcointalk.org/index.php?topici=222632
+https://bitcointalk.org/index.php?topic=222632
 
 or
 
