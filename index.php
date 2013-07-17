@@ -148,12 +148,13 @@ for ($i=0; $i<$nr_rigs; $i++)
 <?php
 for ($i=0; $i<$nr_rigs; $i++)
 {
+	$pool_priority = 999;
 	foreach ($r[$i]['pools'] as $pool)
 	{
-		if ($pool['Stratum Active'] == 'true')
+		if (($pool['Status'] == 'Alive') && ($pool['Priority'] < $pool_priority))
 		{
-			$pool_active = '<span style="font-weight:normal">Pool ' . $pool['POOL'] . ' - ' . $pool['URL'] . '</span>';
-			break;
+			$pool_priority = $pool['Priority'];
+			$pool_active = '<span style="font-weight:normal">Pool ' . $pool['POOL'] . ' - ' . $pool['URL'] . ', user - ' . $pool['User'] . '</span>';
 		}
 	}
 	?>
@@ -187,7 +188,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 					<tr>
 						<td style="text-align:center"><?php echo $gpu['GPU'] ?></td>
 						<td style="text-align:center"><?php echo $gpu['Status'] == 'Alive' ? '<span class="ok">' . $gpu['Status'] . '</span>' : '<span class="error">' . $gpu['Status'] . '</span>' ?></td>
-						<td style="text-align:center"><?php echo $gpu['Temperature'] > ALERT_TEMP ? '<span class="error">' . round($gpu['Temperature']) . '°C</span>' : round($gpu['Temperature']) ?>°C</td>
+						<td style="text-align:center"><?php echo $gpu['Temperature'] > ALERT_TEMP ? '<span class="error">' . round($gpu['Temperature']) . '°C</span>' : round($gpu['Temperature']) . '°C' ?></td>
 						<td style="text-align:center"><?php echo $gpu['Fan Percent']?>%</td>
 						<td style="text-align:center">
 							<?php
