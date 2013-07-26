@@ -149,6 +149,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 for ($i=0; $i<$nr_rigs; $i++)
 {
 	$pool_priority = 999;
+	$pool_active = '';
 	foreach ($r[$i]['pools'] as $pool)
 	{
 		if (($pool['Status'] == 'Alive') && ($pool['Priority'] < $pool_priority))
