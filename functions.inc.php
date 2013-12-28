@@ -47,6 +47,9 @@ define('SCRIPT_URL', 'http://WEBSERVER_IP/monitoring/');
 // Time in Seconds to Auto Refresh the script
 define('SCRIPT_REFRESH', 20);
 
+// Show Pool and User name
+define('SHOW_POOLS', TRUE);
+
 /*--------------
 # SETUP ALERTS #
 --------------*/
