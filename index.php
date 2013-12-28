@@ -20,7 +20,7 @@ for ($i=0; $i<$nr_rigs; $i++)
 	{
 		$r[$i]['devs']  = request('devs',  $r[$i]['ip'], $r[$i]['port']);
 		$r[$i]['stats'] = request('stats', $r[$i]['ip'], $r[$i]['port']);
-		$r[$i]['pools'] = request('pools', $r[$i]['ip'], $r[$i]['port']);
+		$r[$i]['pools'] = SHOW_POOLS ? request('pools', $r[$i]['ip'], $r[$i]['port']) : FALSE;
 		$r[$i]['coin']  = request('coin',  $r[$i]['ip'], $r[$i]['port']);
 	}
 }
@@ -148,23 +148,25 @@ for ($i=0; $i<$nr_rigs; $i++)
 <?php
 for ($i=0; $i<$nr_rigs; $i++)
 {
-	$pool_priority = 999;
-	$pool_active = '';
-	foreach ($r[$i]['pools'] as $pool)
+	if (SHOW_POOLS)
 	{
-		if (($pool['Status'] == 'Alive') && ($pool['Priority'] < $pool_priority))
+		$pool_priority = 999;
+		foreach ($r[$i]['pools'] as $pool)
 		{
-			$pool_priority = $pool['Priority'];
-			$pool_active = '<span style="font-weight:normal">Pool ' . $pool['POOL'] . ' - ' . $pool['URL'] . ', user - ' . $pool['User'] . '</span>';
+			if (($pool['Status'] == 'Alive') && ($pool['Priority'] < $pool_priority))
+			{
+				$pool_priority = $pool['Priority'];
+				$pool_active = '<br><span style="font-weight:normal">Pool ' . $pool['POOL'] . ' - ' . $pool['URL'] . ', user - ' . $pool['User'] . '</span>';
+			}
 		}
 	}
 	?>
 	<table border="1">
 		<tr>
-			<th colspan="10" style="background:#ccc;"><?php echo $r[$i]['name']?><br><?php echo $pool_active;?></th>
+			<th colspan="10" style="background:#ccc;"><?php echo $r[$i]['name']?><?php echo $pool_active?></th>
 		</tr>
 		<tr>
-			<th style="width:50px;">GPU</th>
+			<th style="width:50px;">Device</th>
 			<th style="width:120px;">Status</th>
 			<th style="width:80px;">Temp</th>
 			<th style="width:70px;">Fan</th>
@@ -180,35 +182,50 @@ for ($i=0; $i<$nr_rigs; $i++)
 		{
 			$j = 0;
 			$k = count($r[$i]['devs']);
-			foreach ($r[$i]['devs'] as $gpu)
+			foreach ($r[$i]['devs'] as $dev)
 			{
 				if ($j > 0 && $j < $k)
 				{
-					$invalid_ratio = round(($gpu['Rejected'] / ($gpu['Accepted'] + $gpu['Rejected'])) * 100,2);
+					$invalid_ratio = round(($dev['Rejected'] / ($dev['Accepted'] + $dev['Rejected'])) * 100,2);
 					?>
 					<tr>
-						<td style="text-align:center"><?php echo $gpu['GPU'] ?></td>
-						<td style="text-align:center"><?php echo $gpu['Status'] == 'Alive' ? '<span class="ok">' . $gpu['Status'] . '</span>' : '<span class="error">' . $gpu['Status'] . '</span>' ?></td>
-						<td style="text-align:center"><?php echo $gpu['Temperature'] > ALERT_TEMP ? '<span class="error">' . round($gpu['Temperature']) . '°C</span>' : round($gpu['Temperature']) . '°C' ?></td>
-						<td style="text-align:center"><?php echo $gpu['Fan Percent']?>%</td>
 						<td style="text-align:center">
 							<?php
-							$stats_second = isset ($gpu['MHS 5s']) ? $gpu['MHS 5s'] : (isset ($gpu['MHS 2s']) ? $gpu['MHS 2s'] : FALSE);
-							if (100 - (($stats_second / $gpu['MHS av']) * 100) >= ALERT_MHS)
+							if (isset ($dev['GPU']))
 							{
-								echo '<span class="error">' . ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $gpu['MHS av'] * 1000 : $stats_second . ' | ' . $gpu['MHS av']) . '</span>';
+								echo 'GPU ' . $dev['GPU'];
 							}
-							else
+							else if (isset ($dev['ASC']))
 							{
-								echo ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $gpu['MHS av'] * 1000 : $stats_second . ' | ' . $gpu['MHS av']);
+								echo 'ASC ' . $dev['ASC'];
+							}
+							else if (isset ($dev['PGA']))
+							{
+								echo 'PGA ' . $dev['PGA'];
 							}
 							?>
 						</td>
-						<td style="text-align:center"><?php echo $gpu['Accepted']?></td>
-						<td style="text-align:center"><?php echo $gpu['Rejected']?></td>
-						<td style="text-align:center"><?php echo $gpu['Hardware Errors'] == 0  ? '<span class="ok">0</span>' : '<span class="error">' . $gpu['Hardware Errors'] . '</span>' ?></td>
+						<td style="text-align:center"><?php echo $dev['Status'] == 'Alive' ? '<span class="ok">' . $dev['Status'] . '</span>' : '<span class="error">' . $dev['Status'] . '</span>' ?></td>
+						<td style="text-align:center"><?php echo $dev['Temperature'] > ALERT_TEMP ? '<span class="error">' . round($dev['Temperature']) . '°C</span>' : round($dev['Temperature']) . '°C' ?></td>
+						<td style="text-align:center"><?php echo $dev['Fan Percent']?>%</td>
+						<td style="text-align:center">
+							<?php
+							$stats_second = isset ($dev['MHS 5s']) ? $dev['MHS 5s'] : (isset ($dev['MHS 2s']) ? $dev['MHS 2s'] : FALSE);
+							if (100 - (($stats_second / $dev['MHS av']) * 100) >= ALERT_MHS)
+							{
+								echo '<span class="error">' . ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $dev['MHS av'] * 1000 : $stats_second . ' | ' . $dev['MHS av']) . '</span>';
+							}
+							else
+							{
+								echo ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $dev['MHS av'] * 1000 : $stats_second . ' | ' . $dev['MHS av']);
+							}
+							?>
+						</td>
+						<td style="text-align:center"><?php echo $dev['Accepted']?></td>
+						<td style="text-align:center"><?php echo $dev['Rejected']?></td>
+						<td style="text-align:center"><?php echo $dev['Hardware Errors'] == 0  ? '<span class="ok">0</span>' : '<span class="error">' . $dev['Hardware Errors'] . '</span>' ?></td>
 						<td style="text-align:center"><?php echo $invalid_ratio <= ALERT_STALES  ? $invalid_ratio . '%' : '<span class="error">' . $invalid_ratio . '%</span>' ?></td>
-						<td style="text-align:center"><?php echo date('Y-m-d H:i:s', $gpu['Last Valid Work']) ?></td>
+						<td style="text-align:center"><?php echo date('Y-m-d H:i:s', $dev['Last Valid Work']) ?></td>
 					</tr>
 					<?php
 				}
