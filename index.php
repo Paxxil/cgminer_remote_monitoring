@@ -2,7 +2,7 @@
 /*########################################################
 SIMPLE CGMINER REMOTE MONITORING SCRIPT WITH ALERTS
 Created by: p4xil
-Version: 2.1
+Version: 2.1.1
 
 If you like it please support it with donating:
 LTC : LdQ1UHiRy24Tvmm8NHbhAdHL3Qf3JqrUbG
