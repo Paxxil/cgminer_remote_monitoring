@@ -148,15 +148,19 @@ for ($i=0; $i<$nr_rigs; $i++)
 <?php
 for ($i=0; $i<$nr_rigs; $i++)
 {
+	$pool_active = '';
 	if (SHOW_POOLS)
 	{
 		$pool_priority = 999;
-		foreach ($r[$i]['pools'] as $pool)
+		foreach ($r[$i]['pools'] as $key=>$pool)
 		{
-			if (($pool['Status'] == 'Alive') && ($pool['Priority'] < $pool_priority))
+			if ($key != 'STATUS')
 			{
-				$pool_priority = $pool['Priority'];
-				$pool_active = '<br><span style="font-weight:normal">Pool ' . $pool['POOL'] . ' - ' . $pool['URL'] . ', user - ' . $pool['User'] . '</span>';
+				if (($pool['Status'] == 'Alive') && ($pool['Priority'] < $pool_priority))
+				{
+					$pool_priority = $pool['Priority'];
+					$pool_active = '<br><span style="font-weight:normal">Pool ' . $pool['POOL'] . ' - ' . $pool['URL'] . ', user - ' . $pool['User'] . '</span>';
+				}
 			}
 		}
 	}
@@ -180,13 +184,16 @@ for ($i=0; $i<$nr_rigs; $i++)
 		<?php
 		if (isset ($r[$i]['devs']))
 		{
-			$j = 0;
-			$k = count($r[$i]['devs']);
-			foreach ($r[$i]['devs'] as $dev)
+			foreach ($r[$i]['devs'] as $key=>$dev)
 			{
-				if ($j > 0 && $j < $k)
+				if ($key != 'STATUS')
 				{
-					$invalid_ratio = round(($dev['Rejected'] / ($dev['Accepted'] + $dev['Rejected'])) * 100,2);
+					$invalid_ratio = 0;
+					$total_shares =  $dev['Accepted'] + $dev['Rejected'];
+					if ($total_shares > 0)
+					{
+						$invalid_ratio = round(($dev['Rejected'] / $total_shares) * 100,2);
+					}
 					?>
 					<tr>
 						<td style="text-align:center">
@@ -210,14 +217,21 @@ for ($i=0; $i<$nr_rigs; $i++)
 						<td style="text-align:center"><?php echo $dev['Fan Percent']?>%</td>
 						<td style="text-align:center">
 							<?php
-							$stats_second = isset ($dev['MHS 5s']) ? $dev['MHS 5s'] : (isset ($dev['MHS 2s']) ? $dev['MHS 2s'] : FALSE);
-							if (100 - (($stats_second / $dev['MHS av']) * 100) >= ALERT_MHS)
+							$stats_second = isset ($dev['MHS 5s']) ? $dev['MHS 5s'] : (isset ($dev['MHS 2s']) ? $dev['MHS 2s'] : 0);
+							$stats_second_string = $r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $dev['MHS av'] * 1000 : $stats_second . ' | ' . $dev['MHS av'];
+							$stats_ratio = 0;
+							if ($dev['MHS av'] > 0)
 							{
-								echo '<span class="error">' . ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $dev['MHS av'] * 1000 : $stats_second . ' | ' . $dev['MHS av']) . '</span>';
+								$stats_ratio = $stats_second / $dev['MHS av'];
+							}
+
+							if (100 - ($stats_ratio * 100) >= ALERT_MHS)
+							{
+								echo '<span class="error">' . $stats_second_string . '</span>';
 							}
 							else
 							{
-								echo ($r[$i]['coin']['COIN']['Hash Method'] == 'scrypt' ? $stats_second * 1000 . ' | ' . $dev['MHS av'] * 1000 : $stats_second . ' | ' . $dev['MHS av']);
+								echo $stats_second_string;
 							}
 							?>
 						</td>
@@ -229,7 +243,6 @@ for ($i=0; $i<$nr_rigs; $i++)
 					</tr>
 					<?php
 				}
-				$j++;
 			}
 		}
 		else
