@@ -1,4 +1,5 @@
 <?php
+error_reporting(0);
 /*########################################################
 SIMPLE CGMINER REMOTE MONITORING SCRIPT WITH ALERTS
 Created by: p4xil
